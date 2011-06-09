@@ -21,6 +21,7 @@ use Gedmo\Sluggable\SluggableListener;
 use Gedmo\Tree\TreeListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Gedmo\Loggable\LoggableListener;
+use Gedmo\References\ReferencesListener;
 
 /**
  * Base test case contains common mock objects
@@ -182,6 +183,7 @@ abstract class BaseTestCaseOM extends \PHPUnit_Framework_TestCase
             $this->evm->addEventSubscriber(new LoggableListener);
             $this->evm->addEventSubscriber(new TranslationListener);
             $this->evm->addEventSubscriber(new TimestampableListener);
+            $this->evm->addEventSubscriber(new ReferencesListener);
         }
         return $this->evm;
     }
