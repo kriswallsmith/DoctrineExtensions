@@ -40,7 +40,7 @@ class ReferencesListenerTest extends BaseTestCaseOM
         $this->em = $this->getMockSqliteEntityManager(array('Gedmo\References\Fixture\ORM\StockItem'), new ORMAnnotationDriver($reader, __DIR__ . '/Fixture/ORM'));
     }
 
-    public function testShouldMapReferencesIdentifiers()
+    public function testShouldPersistReferencedIdentifiersIntoIdentifierField()
     {
         $stockItem = new StockItem();
         $stockItem->setName('Apple TV');
