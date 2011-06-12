@@ -42,14 +42,17 @@ class ReferencesListener extends MappedEventSubscriber
             if (isset($mapping['identifier'])) {
                 $property = $meta->reflClass->getProperty($mapping['field']);
                 $property->setAccessible(true);
-                $meta->setFieldValue(
-                    $object,
-                    $mapping['identifier'],
-                    $this->extractIdentifier(
-                        $this->managers[$mapping['type']],
-                        $property->getValue($object)
-                    )
-                );
+                $referencedObject = $property->getValue($object);
+                if (is_object($referencedObject)) {
+                    $meta->setFieldValue(
+                        $object,
+                        $mapping['identifier'],
+                        $this->extractIdentifier(
+                            $this->managers[$mapping['type']],
+                            $referencedObject
+                        )
+                    );
+                }
             }
         }
     }
