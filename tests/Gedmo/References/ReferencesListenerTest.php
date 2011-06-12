@@ -20,15 +20,24 @@ class ReferencesListenerTest extends BaseTestCaseOM
 
     protected function setUp()
     {
-        $reader = new AnnotationReader();
-        $reader->setDefaultAnnotationNamespace('Doctrine\ORM\Mapping\\');
-
-        $this->em = $this->getMockSqliteEntityManager(array('Gedmo\References\Fixture\ORM\StockItem'), new ORMAnnotationDriver($reader, __DIR__ . '/Fixture/ORM'));
+        parent::setUp();
 
         $reader = new AnnotationReader();
         $reader->setDefaultAnnotationNamespace('Doctrine\ODM\MongoDB\Mapping\\');
 
         $this->dm = $this->getMockDocumentManager('test', new MongoDBAnnotationDriver($reader, __DIR__ . '/Fixture/ODM/MongoDB'));
+
+        $listener = new ReferencesListener(array(
+            'entity' => $this->em,
+            'document' => $this->dm
+        ));
+
+        $this->evm->addEventSubscriber($listener);
+
+        $reader = new AnnotationReader();
+        $reader->setDefaultAnnotationNamespace('Doctrine\ORM\Mapping\\');
+
+        $this->em = $this->getMockSqliteEntityManager(array('Gedmo\References\Fixture\ORM\StockItem'), new ORMAnnotationDriver($reader, __DIR__ . '/Fixture/ORM'));
     }
 
     public function testShouldMapReferencesIdentifiers()
