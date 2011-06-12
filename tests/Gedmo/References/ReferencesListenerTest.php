@@ -56,10 +56,7 @@ class ReferencesListenerTest extends BaseTestCaseOM
         $stockItem->setProduct($product);
 
         $this->em->persist($stockItem);
-        $this->em->flush();
 
-        $stockItem = $this->em->find('Gedmo\References\Fixture\ORM\StockItem', $stockItem->getId());
-
-        $this->assertSame($product, $stockItem->getProduct());
+        $this->assertEquals($product->getId(), $stockItem->getProductId());
     }
 }

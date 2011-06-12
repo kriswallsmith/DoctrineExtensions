@@ -90,4 +90,9 @@ class StockItem
     {
         return $this->product;
     }
+
+    public function getProductId()
+    {
+        return $this->productId;
+    }
 }
