@@ -59,4 +59,27 @@ class ReferencesListenerTest extends BaseTestCaseOM
 
         $this->assertEquals($product->getId(), $stockItem->getProductId());
     }
+
+    public function testShouldPopulateReferenceWithProxyFromIdentifierField()
+    {
+        $product = new Product();
+        $product->setName('Apple TV');
+
+        $this->dm->persist($product);
+        $this->dm->flush();
+
+        $stockItem = new StockItem();
+        $stockItem->setName('Apple TV');
+        $stockItem->setSku('APP-TV');
+        $stockItem->setQuantity(25);
+        $stockItem->setProductId($product->getId());
+
+        $this->em->persist($stockItem);
+        $this->em->flush();
+        $this->em->clear();
+
+        $stockItem = $this->em->find(get_class($stockItem), $stockItem->getId());
+
+        $this->assertSame($product, $stockItem->getProduct());
+    }
 }

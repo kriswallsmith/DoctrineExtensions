@@ -91,6 +91,11 @@ class StockItem
         return $this->product;
     }
 
+    public function setProductId($productId)
+    {
+        $this->productId = $productId;
+    }
+
     public function getProductId()
     {
         return $this->productId;
