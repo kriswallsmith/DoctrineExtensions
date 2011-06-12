@@ -71,14 +71,15 @@ class Annotation implements AnnotationDriverInterface
     public function readExtendedMetadata(ClassMetadata $meta, array &$config) {
         $class = $meta->getReflectionClass();
         // property annotations
-        foreach ($class->getProperties() as $property) {
-            if ($meta->isMappedSuperclass && !$property->isPrivate() ||
-                $meta->isInheritedField($property->name) ||
-                isset($meta->associationMappings[$property->name]['inherited'])
-            ) {
-                continue;
-            }
-            foreach($this->annotations as $key => $annotation) {
+        foreach($this->annotations as $key => $annotation) {
+            $config[$key] = array();
+            foreach ($class->getProperties() as $property) {
+                if ($meta->isMappedSuperclass && !$property->isPrivate() ||
+                    $meta->isInheritedField($property->name) ||
+                    isset($meta->associationMappings[$property->name]['inherited'])
+                ) {
+                    continue;
+                }
                 if ($reference = $this->reader->getPropertyAnnotation($property, $annotation)) {
                     $config[$key][] = array(
                         'field'      => $property->getName(),
@@ -91,19 +92,6 @@ class Annotation implements AnnotationDriverInterface
                 }
             }
         }
-    }
-
-    /**
-     * Checks if $field type is valid as Sluggable field
-     *
-     * @param ClassMetadata $meta
-     * @param string $field
-     * @return boolean
-     */
-    protected function isValidField(ClassMetadata $meta, $field)
-    {
-        $mapping = $meta->getFieldMapping($field);
-        return $mapping && in_array($mapping['type'], $this->validTypes);
     }
 
     /**
