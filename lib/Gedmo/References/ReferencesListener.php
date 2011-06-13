@@ -2,6 +2,8 @@
 
 namespace Gedmo\References;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Doctrine\Common\EventArgs;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\ClassMetadata as ORMClassMetadata;
@@ -48,6 +50,28 @@ class ReferencesListener extends MappedEventSubscriber
             }
         }
         foreach ($config['referenceMany'] as $mapping) {
+            $property = $meta->reflClass->getProperty($mapping['field']);
+            $property->setAccessible(true);
+            if (isset($mapping['identifier'])) {
+                $id         = $ea->extractIdentifier($om, $object);
+                $manager    = $this->managers[$mapping['type']];
+                $class      = $mapping['class'];
+                $identifier = $mapping['identifier'];
+                $property->setValue(
+                    $object,
+                    new LazyCollection(
+                        function() use ($id, &$manager, $class, $identifier)
+                        {
+                            $results = $manager
+                                ->getRepository($class)
+                                ->findBy(array(
+                                    $identifier => $id,
+                                ));
+                            return new ArrayCollection((is_array($results) ? $results : $results->toArray()));
+                        }
+                    )
+                );
+            }
         }
     }
 
