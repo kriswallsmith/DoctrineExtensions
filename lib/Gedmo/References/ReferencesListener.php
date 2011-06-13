@@ -27,14 +27,34 @@ class ReferencesListener extends MappedEventSubscriber
 
     public function postLoad(EventArgs $eventArgs)
     {
-
+        $ea = $this->getEventAdapter($eventArgs);
+        $om = $ea->getObjectManager();
+        $object = $ea->getObject();
+        $meta = $om->getClassMetadata(get_class($object));
+        $config = $this->getConfiguration($om, $meta->name);
+        foreach ($config['referenceOne'] as $mapping) {
+            $property = $meta->reflClass->getProperty($mapping['field']);
+            $property->setAccessible(true);
+            if (isset($mapping['identifier'])) {
+                $referencedObjectId = $meta->getFieldValue($object, $mapping['identifier']);
+                $property->setValue(
+                    $object,
+                    $ea->getSingleReference(
+                        $this->managers[$mapping['type']],
+                        $mapping['class'],
+                        $referencedObjectId
+                    )
+                );
+            }
+        }
+        foreach ($config['referenceMany'] as $mapping) {
+        }
     }
 
     public function prePersist(EventArgs $eventArgs)
     {
         $ea = $this->getEventAdapter($eventArgs);
         $om = $ea->getObjectManager();
-        $uow = $om->getUnitOfWork();
         $object = $ea->getObject();
         $meta = $om->getClassMetadata(get_class($object));
         $config = $this->getConfiguration($om, $meta->name);
@@ -47,7 +67,7 @@ class ReferencesListener extends MappedEventSubscriber
                     $meta->setFieldValue(
                         $object,
                         $mapping['identifier'],
-                        $this->extractIdentifier(
+                        $ea->getIdentifier(
                             $this->managers[$mapping['type']],
                             $referencedObject
                         )
@@ -80,53 +100,5 @@ class ReferencesListener extends MappedEventSubscriber
     protected function getNamespace()
     {
         return __NAMESPACE__;
-    }
-
-    /**
-     * TODO: put this method into appropriate driver
-     *
-     * Extracts identifiers from object or proxy
-     *
-     * @param DocumentManager $dm
-     * @param object $object
-     * @param bool $single
-     * @return mixed - array or single identifier
-     */
-    private function extractIdentifier(ObjectManager $om, $object, $single = true)
-    {
-        if ($om instanceof DocumentManager) {
-            $meta = $om->getClassMetadata(get_class($object));
-            if ($object instanceof Proxy) {
-                $id = $om->getUnitOfWork()->getDocumentIdentifier($object);
-            } else {
-                $id = $meta->getReflectionProperty($meta->identifier)->getValue($object);
-            }
-
-            if ($single || !$id) {
-                return $id;
-            } else {
-                return array($meta->identifier => $id);
-            }
-        }
-        if ($om instanceof EntityManager) {
-            if ($object instanceof Proxy) {
-                $id = $om->getUnitOfWork()->getEntityIdentifier($object);
-            } else {
-                $meta = $om->getClassMetadata(get_class($object));
-                $id = array();
-                foreach ($meta->identifier as $name) {
-                    $id[$name] = $meta->getReflectionProperty($name)->getValue($object);
-                    // return null if one of identifiers is missing
-                    if (!$id[$name]) {
-                        return null;
-                    }
-                }
-            }
-
-            if ($single) {
-                $id = current($id);
-            }
-            return $id;
-        }
     }
 }
