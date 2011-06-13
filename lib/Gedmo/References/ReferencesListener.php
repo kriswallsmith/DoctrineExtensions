@@ -41,7 +41,7 @@ class ReferencesListener extends MappedEventSubscriber
                 $property->setValue(
                     $object,
                     $ea->getSingleReference(
-                        $this->managers[$mapping['type']],
+                        $this->getManager($mapping['type']),
                         $mapping['class'],
                         $referencedObjectId
                     )
@@ -53,7 +53,7 @@ class ReferencesListener extends MappedEventSubscriber
             $property->setAccessible(true);
             if (isset($mapping['mappedBy'])) {
                 $id         = $ea->extractIdentifier($om, $object);
-                $manager    = $this->managers[$mapping['type']];
+                $manager    = $this->getManager($mapping['type']);
                 $class      = $mapping['class'];
                 $refConfig  = $this->getConfiguration($manager, $class);
                 if (isset($refConfig['referenceOne'][$mapping['mappedBy']])) {
@@ -95,7 +95,7 @@ class ReferencesListener extends MappedEventSubscriber
                         $object,
                         $mapping['identifier'],
                         $ea->getIdentifier(
-                            $this->managers[$mapping['type']],
+                            $this->getManager($mapping['type']),
                             $referencedObject
                         )
                     );
@@ -122,6 +122,11 @@ class ReferencesListener extends MappedEventSubscriber
     public function registerManager($type, $manager)
     {
         $this->managers[$type] = $manager;
+    }
+
+    public function getManager($type)
+    {
+        return $this->managers[$type];
     }
 
     protected function getNamespace()
