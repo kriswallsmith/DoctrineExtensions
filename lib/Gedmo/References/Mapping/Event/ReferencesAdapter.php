@@ -3,6 +3,7 @@
 namespace Gedmo\References\Mapping\Event;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
 use Gedmo\Mapping\Event\AdapterInterface;
 
 /**
@@ -18,4 +19,6 @@ use Gedmo\Mapping\Event\AdapterInterface;
  */
 interface ReferencesAdapter extends AdapterInterface
 {
+    function getIdentifier(ObjectManager $om, $object, $single = true);
+    function getSingleReference(ObjectManager $om, $class, $identifier);
 }
