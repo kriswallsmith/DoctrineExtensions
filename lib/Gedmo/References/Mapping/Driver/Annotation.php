@@ -58,7 +58,7 @@ class Annotation implements AnnotationDriverInterface
     /**
      * {@inheritDoc}
      */
-    public function validateFullMetadata(ClassMetadata $meta, array $config)
+    public function validateFullMetadata($meta, array $config)
     {
 //        if ($config && !isset($config['fields'])) {
 //            throw new InvalidMappingException("Unable to find any sluggable fields specified for Sluggable entity - {$meta->name}");
@@ -68,7 +68,7 @@ class Annotation implements AnnotationDriverInterface
     /**
      * {@inheritDoc}
      */
-    public function readExtendedMetadata(ClassMetadata $meta, array &$config) {
+    public function readExtendedMetadata($meta, array &$config) {
         $class = $meta->getReflectionClass();
         // property annotations
         foreach($this->annotations as $key => $annotation) {
@@ -81,7 +81,7 @@ class Annotation implements AnnotationDriverInterface
                     continue;
                 }
                 if ($reference = $this->reader->getPropertyAnnotation($property, $annotation)) {
-                    $config[$key][] = array(
+                    $config[$key][$property->getName()] = array(
                         'field'      => $property->getName(),
                         'type'       => $reference->type,
                         'class'      => $reference->class,

@@ -23,7 +23,7 @@ use Gedmo\References\Mapping\Event\ReferencesAdapter;
  */
 final class ODM extends BaseAdapterODM implements ReferencesAdapter
 {
-    public function getIdentifier(ObjectManager $om, $object, $single = true)
+    public function getIdentifier($om, $object, $single = true)
     {
         if ($om instanceof DocumentManager) {
             return $this->extractIdentifier($om, $object, $single);
@@ -50,7 +50,7 @@ final class ODM extends BaseAdapterODM implements ReferencesAdapter
         }
     }
 
-    public function getSingleReference(ObjectManager $om, $class, $identifier)
+    public function getSingleReference($om, $class, $identifier)
     {
         $this->throwIfNotEntityManager($om);
         return $om->getReference($class, $identifier);

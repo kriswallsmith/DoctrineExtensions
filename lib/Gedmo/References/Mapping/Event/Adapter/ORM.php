@@ -22,7 +22,7 @@ use Gedmo\References\Mapping\Event\ReferencesAdapter;
  */
 final class ORM extends BaseAdapterORM implements ReferencesAdapter
 {
-    public function getIdentifier(ObjectManager $om, $object, $single = true)
+    public function getIdentifier($om, $object, $single = true)
     {
         if ($om instanceof EntityManager) {
             return $this->extractIdentifier($om, $object, $single);
@@ -43,7 +43,7 @@ final class ORM extends BaseAdapterORM implements ReferencesAdapter
         }
     }
 
-    public function getSingleReference(ObjectManager $om, $class, $identifier)
+    public function getSingleReference($om, $class, $identifier)
     {
         $this->throwIfNotDocumentManager($om);
         return $om->getReference($class, $identifier);
