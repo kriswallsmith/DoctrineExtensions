@@ -6,9 +6,6 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Gedmo\Mapping\ExtensionMetadataFactory,
     Doctrine\Common\EventSubscriber,
-    Doctrine\Common\Persistence\ObjectManager,
-    Doctrine\Common\Persistence\Mapping\ClassMetadata,
-    Doctrine\Common\ClassLoader,
     Doctrine\Common\EventArgs;
 
 /**
@@ -91,7 +88,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
      * @param string $class
      * @return array
      */
-    public function getConfiguration(ObjectManager $objectManager, $class) {
+    public function getConfiguration($objectManager, $class) {
         $config = array();
         if (isset($this->configurations[$class])) {
             $config = $this->configurations[$class];
@@ -112,7 +109,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
      * @param ObjectManager $objectManager
      * @return Gedmo\Mapping\ExtensionMetadataFactory
      */
-    public function getExtensionMetadataFactory(ObjectManager $objectManager)
+    public function getExtensionMetadataFactory($objectManager)
     {
         $oid = spl_object_hash($objectManager);
         if (!isset($this->extensionMetadataFactory[$oid])) {
@@ -157,7 +154,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
      * @param ClassMetadata $metadata
      * @return void
      */
-    public function loadMetadataForObjectClass(ObjectManager $objectManager, ClassMetadata $metadata)
+    public function loadMetadataForObjectClass($objectManager, $metadata)
     {
         $factory = $this->getExtensionMetadataFactory($objectManager);
         $config = $factory->getExtensionMetadata($metadata);

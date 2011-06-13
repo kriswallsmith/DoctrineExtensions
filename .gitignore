@@ -2,7 +2,7 @@ tests/phpunit.xml
 tests/temp/*.php
 build/
 scripts/
-.gitmodules
+vendor/
 .project
 .settings
 .build.xml

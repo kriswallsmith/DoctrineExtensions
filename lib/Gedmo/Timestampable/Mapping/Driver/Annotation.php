@@ -3,8 +3,6 @@
 namespace Gedmo\Timestampable\Mapping\Driver;
 
 use Gedmo\Mapping\Driver\AnnotationDriverInterface,
-    Doctrine\Common\Persistence\Mapping\ClassMetadata,
-    Doctrine\Common\Annotations\AnnotationReader,
     Gedmo\Exception\InvalidMappingException;
 
 /**
@@ -61,12 +59,12 @@ class Annotation implements AnnotationDriverInterface
     /**
      * {@inheritDoc}
      */
-    public function validateFullMetadata(ClassMetadata $meta, array $config) {}
+    public function validateFullMetadata($meta, array $config) {}
 
     /**
      * {@inheritDoc}
      */
-    public function readExtendedMetadata(ClassMetadata $meta, array &$config) {
+    public function readExtendedMetadata($meta, array &$config) {
         $class = $meta->getReflectionClass();
         // property annotations
         foreach ($class->getProperties() as $property) {
@@ -110,7 +108,7 @@ class Annotation implements AnnotationDriverInterface
      * @param string $field
      * @return boolean
      */
-    protected function isValidField(ClassMetadata $meta, $field)
+    protected function isValidField($meta, $field)
     {
         $mapping = $meta->getFieldMapping($field);
         return $mapping && in_array($mapping['type'], $this->validTypes);

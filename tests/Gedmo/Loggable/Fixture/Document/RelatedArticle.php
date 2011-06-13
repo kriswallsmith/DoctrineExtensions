@@ -26,7 +26,7 @@ class RelatedArticle
     private $content;
 
     /**
-     * @ReferenceMany(targetDocument="Comment", mappedBy="article")
+     * @ReferenceMany(targetDocument="Comment")
      */
     private $comments;
 

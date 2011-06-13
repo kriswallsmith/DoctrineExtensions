@@ -2,8 +2,6 @@
 
 namespace Gedmo\Mapping;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Gedmo\Mapping\Driver\File as FileDriver;
 use Gedmo\Mapping\Driver\AnnotationDriverInterface;
 use Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
@@ -53,7 +51,7 @@ final class ExtensionMetadataFactory
      * @param string $extensionNamespace
      * @param object $annotationReader
      */
-    public function __construct(ObjectManager $objectManager, $extensionNamespace, $annotationReader)
+    public function __construct($objectManager, $extensionNamespace, $annotationReader)
     {
         $this->objectManager = $objectManager;
         $this->annotationReader = $annotationReader;
@@ -68,7 +66,7 @@ final class ExtensionMetadataFactory
      * @param ClassMetadata $meta
      * @return array - the metatada configuration
      */
-    public function getExtensionMetadata(ClassMetadata $meta)
+    public function getExtensionMetadata($meta)
     {
         if ($meta->isMappedSuperclass) {
             return; // ignore mappedSuperclasses for now
@@ -143,7 +141,6 @@ final class ExtensionMetadataFactory
             // create driver instance
             $driverClassName = $this->extensionNamespace . '\Mapping\Driver\\' . $driverName;
             if (!class_exists($driverClassName)) {
-                // @TODO: implement XML driver also
                 $driverClassName = $this->extensionNamespace . '\Mapping\Driver\Annotation';
                 if (!class_exists($driverClassName)) {
                     throw new \Gedmo\Exception\RuntimeException("Failed to fallback to annotation driver: ({$driverClassName}), extension driver was not found.");
@@ -153,6 +150,10 @@ final class ExtensionMetadataFactory
             $driver->setOriginalDriver($omDriver);
             if ($driver instanceof FileDriver) {
                 $driver->setPaths($omDriver->getPaths());
+                $driver->setExtension($omDriver->getFileExtension());
+            }
+            if ($driver instanceof AnnotationDriverInterface) {
+                $driver->setAnnotationReader($this->annotationReader);
             }
             if ($driver instanceof AnnotationDriverInterface) {
                 $driver->setAnnotationReader($this->annotationReader);

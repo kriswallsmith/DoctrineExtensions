@@ -61,7 +61,6 @@ class Closure implements Strategy
     {
         $config = $this->listener->getConfiguration($em, $meta->name);
         $closureMetadata = $em->getClassMetadata($config['closure']);
-
         if (!$closureMetadata->hasAssociation('ancestor')) {
             // create ancestor mapping
             $ancestorMapping = array(

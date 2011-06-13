@@ -21,9 +21,6 @@ class ClosureTreeTest extends BaseTestCaseORM
 {
     const CATEGORY = "Tree\\Fixture\\Closure\\Category";
     const CLOSURE = "Tree\\Fixture\\Closure\\CategoryClosure";
-    const PERSON = "Tree\\Fixture\\Closure\\Person";
-    const USER = "Tree\\Fixture\\Closure\\User";
-    const PERSON_CLOSURE = "Tree\\Fixture\\Closure\\PersonClosure";
 
     protected function setUp()
     {
@@ -38,16 +35,10 @@ class ClosureTreeTest extends BaseTestCaseORM
 
     /*public function testHeavyLoad()
     {
-        $start = microtime(true);
-        $dumpTime = function($start, $msg) {
-            $took = microtime(true) - $start;
-            $minutes = intval($took / 60); $seconds = $took % 60;
-            echo sprintf("%s --> %02d:%02d", $msg, $minutes, $seconds) . PHP_EOL;
-        };
         $repo = $this->em->getRepository(self::CATEGORY);
         $parent = null;
         $num = 800;
-        for($i = 0; $i < 500; $i++) {
+        for($i = 0; $i < 800; $i++) {
             $cat = new Category;
             $cat->setParent($parent);
             $cat->setTitle('cat'.$i);
@@ -64,19 +55,7 @@ class ClosureTreeTest extends BaseTestCaseORM
             $parent = $cat;
         }
         $this->em->flush();
-        $dumpTime($start, $num.' - inserts took:');
-        $start = microtime(true);
-        // test moving
-        $target = $repo->findOneByTitle('cat300');
-        $dest = $repo->findOneByTitle('cat2000');
-        $target->setParent($dest);
-
-        $target2 = $repo->findOneByTitle('cat450');
-        $dest2 = $repo->findOneByTitle('cat2500');
-        $target2->setParent($dest2);
-
-        $this->em->flush();
-        $dumpTime($start, 'moving took:');
+        var_dump('processed: '.$num);
     }*/
 
     public function testClosureTree()
@@ -227,9 +206,6 @@ class ClosureTreeTest extends BaseTestCaseORM
         return array(
             self::CATEGORY,
             self::CLOSURE,
-            self::PERSON,
-            self::PERSON_CLOSURE,
-            self::USER
         );
     }
 

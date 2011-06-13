@@ -2,7 +2,6 @@
 
 namespace Gedmo\Timestampable\Mapping\Event;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Gedmo\Mapping\Event\AdapterInterface;
 
 /**
@@ -24,5 +23,5 @@ interface TimestampableAdapter extends AdapterInterface
      * @param string $field
      * @return mixed
      */
-    function getDateValue(ClassMetadata $meta, $field);
+    function getDateValue($meta, $field);
 }

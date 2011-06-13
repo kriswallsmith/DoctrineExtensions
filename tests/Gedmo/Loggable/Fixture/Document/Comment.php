@@ -27,7 +27,7 @@ class Comment
 
     /**
      * @gedmo:Versioned
-     * @ReferenceOne(targetDocument="RelatedArticle", inversedBy="comments")
+     * @ReferenceOne(targetDocument="RelatedArticle")
      */
     private $article;
 

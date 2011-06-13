@@ -86,11 +86,11 @@ abstract class BaseTestCaseOM extends \PHPUnit_Framework_TestCase
     protected function getMockDocumentManager($dbName, MappingDriverODM $mappingDriver = null)
     {
         $conn = new Connection;
-        $config = $this->getMockAnnotatedODMMongoDBConfig($dbName, $mappingDriver);
+        $config = $this->getMockAnnotatedODMMongoDBConfig($mappingDriver);
 
         $dm = null;
         try {
-            $dm = DocumentManager::create($conn, $config, $this->getEventManager());
+            $dm = DocumentManager::create($conn, $dbName, $config, $this->getEventManager());
             $dm->getConnection()->connect();
         } catch (\MongoException $e) {
             $this->markTestSkipped('Doctrine MongoDB ODM failed to connect');
@@ -109,9 +109,9 @@ abstract class BaseTestCaseOM extends \PHPUnit_Framework_TestCase
     protected function getMockMappedDocumentManager($dbName, MappingDriverODM $mappingDriver = null)
     {
         $conn = $this->getMock('Doctrine\\MongoDB\\Connection');
-        $config = $this->getMockAnnotatedODMMongoDBConfig($dbName, $mappingDriver);
+        $config = $this->getMockAnnotatedODMMongoDBConfig($mappingDriver);
 
-        $dm = DocumentManager::create($conn, $config, $this->getEventManager());
+        $dm = DocumentManager::create($conn, $dbName, $config, $this->getEventManager());
         return $dm;
     }
 
@@ -189,11 +189,10 @@ abstract class BaseTestCaseOM extends \PHPUnit_Framework_TestCase
     /**
      * Get annotation mapping configuration
      *
-     * @param string $dbName
      * @param Doctrine\ODM\MongoDB\Mapping\Driver\Driver $mappingDriver
      * @return Doctrine\ORM\Configuration
      */
-    private function getMockAnnotatedODMMongoDBConfig($dbName, MappingDriverODM $mappingDriver = null)
+    private function getMockAnnotatedODMMongoDBConfig(MappingDriverODM $mappingDriver = null)
     {
         $config = $this->getMock('Doctrine\\ODM\\MongoDB\\Configuration');
         $config->expects($this->once())
@@ -211,10 +210,6 @@ abstract class BaseTestCaseOM extends \PHPUnit_Framework_TestCase
         $config->expects($this->once())
             ->method('getHydratorNamespace')
             ->will($this->returnValue('Hydrator'));
-
-        $config->expects($this->any())
-            ->method('getDefaultDB')
-            ->will($this->returnValue($dbName));
 
         $config->expects($this->once())
             ->method('getAutoGenerateProxyClasses')

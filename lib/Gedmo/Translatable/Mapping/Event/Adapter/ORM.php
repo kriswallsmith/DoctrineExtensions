@@ -3,8 +3,6 @@
 namespace Gedmo\Translatable\Mapping\Event\Adapter;
 
 use Gedmo\Mapping\Event\Adapter\ORM as BaseAdapterORM;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query;
 use Gedmo\Translatable\Mapping\Event\TranslatableAdapter;
 use Doctrine\DBAL\Types\Type;

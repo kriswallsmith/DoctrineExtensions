@@ -40,7 +40,7 @@ class TranslationQueryWalkerTest extends BaseTestCaseORM
         $this->populate();
     }
 
-    public function testSubselectByTranslatedField()
+public function testSubselectByTranslatedField()
     {
         $this->populateMore();
         $dql = 'SELECT a FROM ' . self::ARTICLE . ' a';
@@ -82,7 +82,7 @@ class TranslationQueryWalkerTest extends BaseTestCaseORM
     {
         $this->populateMore();
         $dql = 'SELECT a, c FROM ' . self::ARTICLE . ' a';
-        //@todo: its impossible to support translated values in WITH statement
+        //@todo: its imposible to support translated values in WITH statement
         $dql .= ' LEFT JOIN a.comments c WITH c.subject LIKE :lookup';
         $dql .= ' WHERE a.title LIKE :filter';
         $dql .= ' ORDER BY a.title';
@@ -99,37 +99,6 @@ class TranslationQueryWalkerTest extends BaseTestCaseORM
         $comments = $result[0]['comments'];
         $this->assertEquals(1, count($comments));
         $this->assertEquals('good', $comments[0]['subject']);
-    }
-
-    public function testSelectWithTranslationFallbackOnSimpleObjectHydration()
-    {
-        $this->em
-            ->getConfiguration()
-            ->expects($this->any())
-            ->method('getCustomHydrationMode')
-            ->with(TranslationWalker::HYDRATE_SIMPLE_OBJECT_TRANSLATION)
-            ->will($this->returnValue('Gedmo\\Translatable\\Hydrator\\ORM\\SimpleObjectHydrator'));
-
-        $dql = 'SELECT a FROM ' . self::ARTICLE . ' a';
-        $q = $this->em->createQuery($dql);
-        $q->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, self::TREE_WALKER_TRANSLATION);
-
-        $this->translationListener->setTranslatableLocale('ru_ru');
-        $this->translationListener->setTranslationFallback(false);
-
-        // simple object hydration
-        $this->startQueryLog();
-        $result = $q->getResult(Query::HYDRATE_SIMPLEOBJECT);
-        $this->assertEquals(1, $this->queryAnalyzer->getNumExecutedQueries());
-        $this->assertEquals('', $result[0]->getTitle());
-        $this->assertEquals('', $result[0]->getContent());
-
-        $this->translationListener->setTranslationFallback(true);
-        $this->queryAnalyzer->cleanUp();
-        $result = $q->getResult(Query::HYDRATE_SIMPLEOBJECT);
-        $this->assertEquals(1, $this->queryAnalyzer->getNumExecutedQueries());
-        $this->assertEquals('Maistas', $result[0]->getTitle());
-        $this->assertEquals('apie maista', $result[0]->getContent());
     }
 
     public function testSelectWithTranslationFallbackOnArrayHydration()

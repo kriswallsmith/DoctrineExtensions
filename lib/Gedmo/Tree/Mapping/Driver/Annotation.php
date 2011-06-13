@@ -3,7 +3,6 @@
 namespace Gedmo\Tree\Mapping\Driver;
 
 use Gedmo\Mapping\Driver\AnnotationDriverInterface,
-    Doctrine\Common\Persistence\Mapping\ClassMetadata,
     Gedmo\Exception\InvalidMappingException;
 
 /**
@@ -99,7 +98,7 @@ class Annotation implements AnnotationDriverInterface
     /**
      * {@inheritDoc}
      */
-    public function validateFullMetadata(ClassMetadata $meta, array $config)
+    public function validateFullMetadata($meta, array $config)
     {
         if (isset($config['strategy'])) {
             if (is_array($meta->identifier) && count($meta->identifier) > 1) {
@@ -115,7 +114,7 @@ class Annotation implements AnnotationDriverInterface
     /**
      * {@inheritDoc}
      */
-    public function readExtendedMetadata(ClassMetadata $meta, array &$config) {
+    public function readExtendedMetadata($meta, array &$config) {
         $class = $meta->getReflectionClass();
         // class annotations
         if ($annot = $this->reader->getClassAnnotation($class, self::TREE)) {
@@ -201,7 +200,7 @@ class Annotation implements AnnotationDriverInterface
      * @param string $field
      * @return boolean
      */
-    protected function isValidField(ClassMetadata $meta, $field)
+    protected function isValidField($meta, $field)
     {
         $mapping = $meta->getFieldMapping($field);
         return $mapping && in_array($mapping['type'], $this->validTypes);
@@ -215,7 +214,7 @@ class Annotation implements AnnotationDriverInterface
      * @throws InvalidMappingException
      * @return void
      */
-    private function validateNestedTreeMetadata(ClassMetadata $meta, array $config)
+    private function validateNestedTreeMetadata($meta, array $config)
     {
         $missingFields = array();
         if (!isset($config['parent'])) {
@@ -240,7 +239,7 @@ class Annotation implements AnnotationDriverInterface
      * @throws InvalidMappingException
      * @return void
      */
-    private function validateClosureTreeMetadata(ClassMetadata $meta, array $config)
+    private function validateClosureTreeMetadata($meta, array $config)
     {
         $missingFields = array();
         if (!isset($config['parent'])) {

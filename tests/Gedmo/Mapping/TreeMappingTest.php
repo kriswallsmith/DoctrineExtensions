@@ -54,21 +54,6 @@ class TreeMappingTest extends \PHPUnit_Framework_TestCase
         $this->em = \Doctrine\ORM\EntityManager::create($conn, $config, $evm);
     }
 
-    public function testApcCached()
-    {
-        if (!extension_loaded('apc') || !ini_get('apc.enable_cli')) {
-            $this->markTestSkipped('APC extension is not loaded.');
-        }
-        $meta = $this->em->getClassMetadata(self::YAML_CLOSURE_CATEGORY);
-        $this->em->getClassMetadata('Tree\Fixture\Closure\CategoryClosure');
-
-        $meta = $this->em->getMetadataFactory()->getCacheDriver()->fetch(
-            "Tree\\Fixture\\Closure\\CategoryClosure\$CLASSMETADATA"
-        );
-        $this->assertTrue($meta->hasAssociation('ancestor'));
-        $this->assertTrue($meta->hasAssociation('descendant'));
-    }
-
     public function testYamlNestedMapping()
     {
         $meta = $this->em->getClassMetadata(self::TEST_YAML_ENTITY_CLASS);
