@@ -20,7 +20,7 @@ class Product
     private $name;
 
     /**
-     * @gedmo:ReferenceMany(type="entity", class="Gedmo\References\Fixtures\ORM\StockItem", mappedBy="product")
+     * @gedmo:ReferenceMany(type="entity", class="Gedmo\References\Fixture\ORM\StockItem", identifier="productId")
      */
     private $stockItems;
 
