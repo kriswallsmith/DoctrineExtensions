@@ -55,7 +55,8 @@ class ReferencesListener extends MappedEventSubscriber
                 $id         = $ea->extractIdentifier($om, $object);
                 $manager    = $this->getManager($mapping['type']);
                 $class      = $mapping['class'];
-                $refConfig  = $this->getConfiguration($manager, $class);
+                $refMeta    = $manager->getClassMetadata($class);
+                $refConfig  = $this->getConfiguration($manager, $refMeta->name);
                 if (isset($refConfig['referenceOne'][$mapping['mappedBy']])) {
                     $refMapping = $refConfig['referenceOne'][$mapping['mappedBy']];
                     $identifier = $refMapping['identifier'];
