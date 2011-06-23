@@ -80,6 +80,17 @@ class ReferencesListener extends MappedEventSubscriber
 
     public function prePersist(EventArgs $eventArgs)
     {
+        $this->updateReferences($eventArgs);
+
+    }
+
+    public function preUpdate(EventArgs $eventArgs)
+    {
+        $this->updateReferences($eventArgs);
+    }
+
+    private function updateReferences(EventArgs $eventArgs)
+    {
         $ea = $this->getEventAdapter($eventArgs);
         $om = $ea->getObjectManager();
         $object = $ea->getObject();
@@ -102,11 +113,6 @@ class ReferencesListener extends MappedEventSubscriber
                 }
             }
         }
-    }
-
-    public function preUpdate(EventArgs $eventArgs)
-    {
-
     }
 
     public function getSubscribedEvents()
