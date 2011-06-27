@@ -38,14 +38,16 @@ class ReferencesListener extends MappedEventSubscriber
             $property->setAccessible(true);
             if (isset($mapping['identifier'])) {
                 $referencedObjectId = $meta->getFieldValue($object, $mapping['identifier']);
-                $property->setValue(
-                    $object,
-                    $ea->getSingleReference(
-                        $this->getManager($mapping['type']),
-                        $mapping['class'],
-                        $referencedObjectId
-                    )
-                );
+                if (null !== $referencedObjectId) {
+                    $property->setValue(
+                        $object,
+                        $ea->getSingleReference(
+                            $this->getManager($mapping['type']),
+                            $mapping['class'],
+                            $referencedObjectId
+                        )
+                    );
+                }
             }
         }
         foreach ($config['referenceMany'] as $mapping) {
