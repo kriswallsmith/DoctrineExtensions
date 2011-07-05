@@ -46,6 +46,10 @@ final class ORM extends BaseAdapterORM implements ReferencesAdapter
     public function getSingleReference($om, $class, $identifier)
     {
         $this->throwIfNotDocumentManager($om);
+        $meta = $om->getClassMetadata($class);
+        if (!$meta->isInheritanceTypeNone()) {
+            return $om->find($class, $identifier);
+        }
         return $om->getReference($class, $identifier);
     }
 
