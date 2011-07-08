@@ -46,13 +46,13 @@ class LazyCollection implements Collection
         return $this->results->current();
     }
 
-    public function exists(Closure $p)
+    public function exists(\Closure $p)
     {
         $this->initialize();
         return $this->results->exists($p);
     }
 
-    public function filter(Closure $p)
+    public function filter(\Closure $p)
     {
         $this->initialize();
         return $this->results->filter($p);
@@ -64,7 +64,7 @@ class LazyCollection implements Collection
         return $this->results->first();
     }
 
-    public function forAll(Closure $p)
+    public function forAll(\Closure $p)
     {
         $this->initialize();
         return $this->results->forAll($p);
@@ -112,7 +112,7 @@ class LazyCollection implements Collection
         return $this->results->last();
     }
 
-    public function map(Closure $func)
+    public function map(\Closure $func)
     {
         $this->initialize();
         return $this->results->map($func);
@@ -124,7 +124,7 @@ class LazyCollection implements Collection
         return $this->results->next();
     }
 
-    public function partition(Closure $p)
+    public function partition(\Closure $p)
     {
         $this->initialize();
         return $this->results->partition($p);
