@@ -87,7 +87,7 @@ class Annotation implements AnnotationDriverInterface
                         'class'      => $reference->class,
                         'identifier' => $reference->identifier,
                         'mappedBy'   => $reference->mappedBy,
-                        'indersedBy' => $reference->inversedBy,
+                        'inversedBy' => $reference->inversedBy,
                     );
                 }
             }
