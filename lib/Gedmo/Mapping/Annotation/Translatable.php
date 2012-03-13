@@ -12,6 +12,7 @@ use Doctrine\Common\Annotations\Annotation;
  * @subpackage Translatable
  * @link http://www.gediminasm.org
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @Annotation
  */
 final class Translatable extends Annotation
 {

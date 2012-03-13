@@ -13,6 +13,7 @@ use Doctrine\Common\Annotations\Annotation;
  * @subpackage Language
  * @link http://www.gediminasm.org
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @Annotation
  */
 class ReferenceMany extends Reference
 {
